@@ -1,0 +1,7 @@
+#logging: 
+#  path: E:/LOG/tomcat/
+#  file: E:\LOG\tomcat\sell.log
+#  level: 
+#    com.imooc.service.LoggerTest : debug
+#  pattern: 
+#    console: "%d - %msg%n"
