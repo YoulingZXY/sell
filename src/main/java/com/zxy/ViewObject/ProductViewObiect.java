@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 /**
- * http请求返回的数据的内层数据（包含类目）
+ * http请求返回的数据的中层数据（包含类目）
  * 
  * @author 闻人羽
  *

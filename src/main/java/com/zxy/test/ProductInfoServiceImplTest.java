@@ -1,4 +1,4 @@
-package com.zxy.service.impl;
+package com.zxy.test;
 
 import static org.junit.Assert.*;
 
@@ -17,6 +17,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.zxy.SellApplication;
 import com.zxy.entity.ProductInfo;
 import com.zxy.enums.ProductStatusEnum;
+import com.zxy.service.impl.ProductInfoServiceImpl;
 
 
 @RunWith(SpringRunner.class)

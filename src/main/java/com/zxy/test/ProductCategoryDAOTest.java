@@ -41,7 +41,7 @@ public class ProductCategoryDAOTest {
 	@Test	//测试添加
 	@Transactional
 	public void saveTest() {
-		ProductCategory productCategory = new ProductCategory("测试类目", 1);
+		ProductCategory productCategory = new ProductCategory("测试类目", 99);
 		ProductCategory result = dao.save(productCategory);
 		Assert.assertNotNull(result);
 		//Assert.assertNotEquals(null,result);  //与上一行等效（不期望是null,期望是result）
