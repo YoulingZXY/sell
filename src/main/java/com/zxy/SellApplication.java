@@ -1,4 +1,4 @@
-package com.demo.sell;
+package com.zxy;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
