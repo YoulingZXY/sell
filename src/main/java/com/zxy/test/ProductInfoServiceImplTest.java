@@ -1,9 +1,11 @@
 package com.zxy.test;
 
-import static org.junit.Assert.*;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
+
+import javax.transaction.Transactional;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -15,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.zxy.SellApplication;
+import com.zxy.dto.CartDTO;
 import com.zxy.entity.ProductInfo;
 import com.zxy.enums.ProductStatusEnum;
 import com.zxy.service.impl.ProductInfoServiceImpl;
@@ -59,6 +62,13 @@ public class ProductInfoServiceImplTest {
 		productInfo.setProductStock(10);
 		ProductInfo result = service.save(productInfo);
 		Assert.assertNotNull(result);
+	}
+	
+	@Test
+	@Transactional
+	public void testDecreaseStock() {
+		List<CartDTO> cartDTOList = Arrays.asList(new CartDTO("111",1),new CartDTO("112",1));
+		service.decreaseStock(cartDTOList);
 	}
 
 }

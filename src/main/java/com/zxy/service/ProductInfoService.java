@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.zxy.dto.CartDTO;
 import com.zxy.entity.ProductInfo;
 
 public interface ProductInfoService {
@@ -20,6 +21,8 @@ public interface ProductInfoService {
 	public ProductInfo save(ProductInfo productInfo);
 	
 	//加库存，下单后减少库存
+	public void decreaseStock(List<CartDTO> cartDTOList);
 	
 	//加库存，取消订单后加库存
+	public void increaseStock(List<CartDTO> cartDTOList);
 }

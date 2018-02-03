@@ -6,10 +6,20 @@ import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import lombok.Data;
+
+/**
+ * 商品详情表
+ * 
+ * @author 闻人羽
+ *
+ */
 
 @Entity
 @Data
+@DynamicUpdate
 public class ProductInfo {
 
 	@Id

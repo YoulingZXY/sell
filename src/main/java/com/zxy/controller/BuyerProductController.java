@@ -1,7 +1,6 @@
 package com.zxy.controller;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
@@ -10,13 +9,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.zxy.ViewObject.ProductCategoryViewObject;
 import com.zxy.ViewObject.ProductInfoViewObject;
-import com.zxy.ViewObject.ProductViewObiect;
 import com.zxy.ViewObject.ResultViewObject;
 import com.zxy.entity.ProductCategory;
 import com.zxy.entity.ProductInfo;
 import com.zxy.service.ProductCategoryService;
 import com.zxy.service.ProductInfoService;
+import com.zxy.utils.ResultUtil;
 
 @RestController
 @RequestMapping("/buyer/product")
@@ -32,50 +32,55 @@ public class BuyerProductController {
 		
 		//查询所有在架商品
 		List<ProductInfo> productInfoList = productInfoService.findUpAll();
-		//查询所有在架商品的类目
+		
+		//查询所有在架商品的类目编号~~~~~~~~~更精简方法，lambda表达式，有待学习！！！
 		List<Integer> categoryTypeList = new ArrayList<>();
 		for (ProductInfo productInfo : productInfoList) {
 			categoryTypeList.add(productInfo.getCategoryType());
 		}
-		List<ProductCategory> productCategoryList = productCategoryService.findByCategoryTypeIn(categoryTypeList);
-		//数据拼装
-		//~1、中层data数据
-			//创建data数据列表
-		List<ProductViewObiect> productViewObiectList = new ArrayList<>();
-			//遍历类目列表
-		for (ProductCategory productCategory : productCategoryList) {
-			//创建类目元素（包含类目名字，类目编号，foots(具体商品信息)）
-			ProductViewObiect pvo = new ProductViewObiect();
-			//写入类目名字
-			pvo.setCategoryName(productCategory.getCategoryName());
-			//写入类目编号
-			pvo.setCategoryType(productCategory.getCategoryType());
-			//~2、内层foots数据，具体商品信息列表
-			//创建foots数据列表
-			List<ProductInfoViewObject> productInfoViewObjectList = new ArrayList<>();
-			//遍历商品列表
-			for (ProductInfo productInfo : productInfoList) {
-				//如果该商品类目等于当前类目，则加入foots列表
-				if(productInfo.getCategoryType().equals(productCategory.getCategoryType())) {
-					ProductInfoViewObject pivo = new ProductInfoViewObject();
-					//数据拷贝
-					BeanUtils.copyProperties(productInfo, pivo);
-					//加入foots
-					productInfoViewObjectList.add(pivo);
-				}
-			}
-			//写入当前类目列表
-			pvo.setProductInfoViewObjectList(productInfoViewObjectList);
-			//把封装好的类目数据写入data列表
-			productViewObiectList.add(pvo);
-		}
 		
-		//创建http响应最外层对象
-		ResultViewObject result = new ResultViewObject();
-		result.setCode(0);
-		result.setMsg("成功");
-		//把中层数据列表写入data
-		result.setData(productViewObiectList);
-		return result;
+		//获得所有在架商品的类目信息，注：find xxx By xxx In() 方法会自动去重
+		List<ProductCategory> productCategoryList = productCategoryService.findByCategoryTypeIn(categoryTypeList);
+		
+		//~~~~~~~~~~~~~数据拼装~~~~~~~~~~~~~~
+		
+		//创建响应对象，最外层骨架
+//		ResultViewObject result = new ResultViewObject();
+		//写入错误码，0为正常
+//		result.setCode(0);
+		//写入提示信息
+//		result.setMsg("成功");
+			//创建data对象,中层骨架
+			List<ProductCategoryViewObject> data = new ArrayList<>();
+			//遍历所有在架商品的类目列表
+			for (ProductCategory productCategory : productCategoryList) {
+				//创建响应类目对象
+				ProductCategoryViewObject productCategoryViewObject = new ProductCategoryViewObject();
+				//写入类目名字
+				productCategoryViewObject.setCategoryName(productCategory.getCategoryName());
+				//写入类目编号
+				productCategoryViewObject.setCategoryType(productCategory.getCategoryType());
+					//创建foots对象，内层骨架
+					List<ProductInfoViewObject> foots = new ArrayList<>();
+					//遍历所有在架商品列表
+					for (ProductInfo productInfo : productInfoList) {
+						//判断如果该商品的类目编号等于当前类目的编号，则添加到当前类目的foots列表下
+						if(productInfo.getCategoryType().equals(productCategory.getCategoryType())) {
+							//创建相应商品对象
+							ProductInfoViewObject productInfoViewObject = new ProductInfoViewObject();
+							//数据拷贝，写入商品相关数据
+							BeanUtils.copyProperties(productInfo, productInfoViewObject);
+							//填充内层骨架
+							foots.add(productInfoViewObject);
+						}
+					}
+				//写入foots对象
+				productCategoryViewObject.setProductInfoViewObjectList(foots);
+				//填充中层骨架
+				data.add(productCategoryViewObject);
+			}
+		//写入data对象
+//		result.setData(data);
+		return ResultUtil.success(data);
 	}
 }

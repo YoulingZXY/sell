@@ -10,6 +10,12 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import lombok.Data;
 
+/**
+ * 类名详情表
+ * 
+ * @author 闻人羽
+ *
+ */
 
 @Entity
 @DynamicUpdate   //动态更新，让更新日期字段可以动态更新时间

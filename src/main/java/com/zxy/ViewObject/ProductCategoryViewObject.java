@@ -13,7 +13,7 @@ import lombok.Data;
  *
  */
 @Data
-public class ProductViewObiect {
+public class ProductCategoryViewObject {
 
 	/** 为了可读性好，此处把名字具体化，但返回给浏览器的json字符串名字不变*/
 	@JsonProperty("name")
